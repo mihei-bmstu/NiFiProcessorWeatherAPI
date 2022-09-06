@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <nifi.version>1.17.0</nifi.version>
+        <scala.version.major>2.13</scala.version.major>
+        <scala.version>${scala.version.major}.8</scala.version>
+        <nifi.nar.plugin.version>1.3.1</nifi.nar.plugin.version>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
+        <typesafe.config.version>1.3.0</typesafe.config.version>
+        <sttp.version>3.3.16</sttp.version>
+        <sttp.alt.version>3.3.11</sttp.alt.version>
+        <circe.version>0.14.1</circe.version>
+        <scalatest.version>3.2.9</scalatest.version>
+        <akkaHttp.version>10.2.9</akkaHttp.version>
+        <akka.version>2.6.19</akka.version>
+    </properties>
+
+    <parent>
+        <artifactId>nifi-custom-processor</artifactId>
+        <groupId>com.example</groupId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>nifi-weatherAPI-processors</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-mock-record-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-ssl-context-service-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.config.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-http_${scala.version.major}</artifactId>
+            <version>${akkaHttp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-stream_${scala.version.major}</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor-typed_${scala.version.major}</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+    </dependencies>
+</project>

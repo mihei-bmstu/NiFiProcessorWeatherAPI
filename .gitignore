@@ -1,0 +1,7 @@
+.idea/*
+nifi-weatherAPI-nar/target/*
+nifi-weatherAPI-nar/*.iml
+nifi-weatherAPI-processors/target/*
+nifi-weatherAPI-processors/*.iml
+*.iml
+target/*
