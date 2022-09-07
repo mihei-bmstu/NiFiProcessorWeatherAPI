@@ -10,7 +10,6 @@ import org.apache.nifi.stream.io.StreamUtils
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpEntity, HttpMethods, HttpRequest, HttpResponse}
-import akka.http.scaladsl.model.headers.RawHeader
 
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -80,28 +79,23 @@ class WeatherApiProcessor extends AbstractProcessor {
     entityFuture.map(entity => entity.data.utf8String)
   }
 
-  def getTemp(cityCountry: String = "London,gb"): Future[String] = {
+  def getTemp(cityCountry: String = "moscow,rus"): Future[String] = {
     val request: HttpRequest = HttpRequest(
       method = HttpMethods.GET,
-      uri = "https://aerisweather1.p.rapidapi.com/observations/" + cityCountry
+      uri = "http://localhost:8080/" + cityCountry
     )
-      .withHeaders(
-        RawHeader("X-RapidAPI-Key", "f452e61143msh123aa1934dc90a6p12848bjsn8b09796dd8a2"),
-        RawHeader("X-RapidAPI-Host", "aerisweather1.p.rapidapi.com")
-      )
-
     sendRequest(request)
   }
 
   private def process(inputFlowFile: FlowFile,
                       useDefaultLocation: Boolean,
                       session: ProcessSession): Unit = {
-    val flowFileContents: String = this.readFlowFileContents(inputFlowFile, session)
-    val response: Future[String] = getTemp()
+    val flowFileContent: String = this.readFlowFileContents(inputFlowFile, session)
+    val response: Future[String] = getTemp(flowFileContent)
 
     val outputFlowFiles: FlowFile = session.clone(inputFlowFile)
 
-    session.putAttribute(outputFlowFiles, "processed", Await.result(response, 5.seconds))
+    session.putAttribute(outputFlowFiles, "request_result", Await.result(response, 5.seconds))
     session.transfer(outputFlowFiles, SUCCESS)
     session.remove(inputFlowFile)
   }
@@ -124,15 +118,8 @@ class WeatherApiProcessor extends AbstractProcessor {
   }
 }
   object WeatherApiProcessor {
-    /**
-     * We can get reference to property descriptor using this name.
-     * Once we have reference to property descriptor, we can get its current value
-     */
-    val useDefaultLocationPropertyName: String = "use-default-location"
 
-    /**
-     * We can get reference to relationship using this name
-     */
+    val useDefaultLocationPropertyName: String = "use-default-location"
     val successRelationName: String = "success"
     val failureRelationName: String = "failure"
 

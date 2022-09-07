@@ -13,7 +13,7 @@
     <groupId>com.example</groupId>
     <artifactId>nifi-custom-processor</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 
     <modules>
         <module>nifi-weatherAPI-processors</module>
@@ -33,6 +33,8 @@
         <scalatest.version>3.2.9</scalatest.version>
         <akkaHttp.version>10.2.9</akkaHttp.version>
         <akka.version>2.6.19</akka.version>
+        <org.scalatest.version>3.2.13</org.scalatest.version>
+        <org.scalactic.version>3.2.13</org.scalactic.version>
     </properties>
 
     <dependencyManagement>
@@ -162,6 +164,19 @@
                         <id>scala-test-compile</id>
                         <goals>
                             <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>test</goal>
                         </goals>
                     </execution>
                 </executions>
