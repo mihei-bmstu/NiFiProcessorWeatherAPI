@@ -22,7 +22,8 @@ import scala.jdk.CollectionConverters._
 @CapabilityDescription(
   "This processor takes as an input a string 'city,country' and returns current weather in the specified location"
 )
-class WeatherApiProcessor extends AbstractProcessor {
+class WeatherApiProcessor extends AbstractProcessor
+  with WeatherApiProcessorProperties {
 
   val SUCCESS: Relationship = new Relationship.Builder().name(WeatherApiProcessor.successRelationName).build
 
@@ -30,12 +31,16 @@ class WeatherApiProcessor extends AbstractProcessor {
 
   var useDefaultLocation: PropertyDescriptor = _
 
+  override def getSupportedPropertyDescriptors(): java.util.List[PropertyDescriptor] = {
+    properties.asJava
+  }
+
   /**
    * Build the property descriptor object
    *
    * @param context
    */
-  override def init(context: ProcessorInitializationContext): Unit = {
+  /*override def init(context: ProcessorInitializationContext): Unit = {
     useDefaultLocation = new PropertyDescriptor.Builder()
       .name(WeatherApiProcessor.useDefaultLocationPropertyName)
       .displayName("Use default location")
@@ -45,7 +50,7 @@ class WeatherApiProcessor extends AbstractProcessor {
       .defaultValue("true")
       .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
       .build()
-  }
+  }*/
 
   override def getRelationships: util.Set[Relationship] = {
     Set(SUCCESS, FAILURE).asJava
@@ -61,12 +66,11 @@ class WeatherApiProcessor extends AbstractProcessor {
   override def onTrigger(processContext: ProcessContext, processSession: ProcessSession): Unit = {
     val flowFile: FlowFile = processSession.get()
     if (flowFile != null) {
-      /*val useDefaultLocation: Boolean = processContext
+      val useDefault: Boolean = processContext
         .getProperty(WeatherApiProcessor.useDefaultLocationPropertyName)
         .getValue
-        .toBoolean*/
-      val useDefaultLocation: Boolean = false
-        process(flowFile, useDefaultLocation, processSession)
+        .toBoolean
+        process(flowFile, useDefault, processSession)
     }
   }
 
@@ -90,9 +94,10 @@ class WeatherApiProcessor extends AbstractProcessor {
   private def process(inputFlowFile: FlowFile,
                       useDefaultLocation: Boolean,
                       session: ProcessSession): Unit = {
-    val flowFileContent: String = this.readFlowFileContents(inputFlowFile, session)
-    val response: Future[String] = getTemp(flowFileContent)
-
+    val response = if (useDefaultLocation) getTemp() else {
+      val flowFileContent = this.readFlowFileContents(inputFlowFile, session)
+      getTemp(flowFileContent)
+    }
     val outputFlowFiles: FlowFile = session.clone(inputFlowFile)
 
     session.putAttribute(outputFlowFiles, "request_result", Await.result(response, 5.seconds))

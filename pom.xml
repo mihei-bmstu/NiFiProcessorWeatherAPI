@@ -13,7 +13,7 @@
     <groupId>com.example</groupId>
     <artifactId>nifi-custom-processor</artifactId>
     <packaging>pom</packaging>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 
     <modules>
         <module>nifi-weatherAPI-processors</module>
@@ -168,19 +168,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <id>test</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 

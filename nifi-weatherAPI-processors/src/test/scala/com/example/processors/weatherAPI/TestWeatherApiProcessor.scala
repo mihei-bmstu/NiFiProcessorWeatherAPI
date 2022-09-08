@@ -15,6 +15,7 @@ class TestWeatherApiProcessor extends AnyFunSuite with should.Matchers {
   val wrongInputData: String = "msdfdf,fdr"
   val wrongTestRunner: TestRunner = TestRunners.newTestRunner(new WeatherApiProcessor)
 
+  wrongTestRunner.setProperty(WeatherApiProcessor.useDefaultLocationPropertyName, "false")
   wrongTestRunner.enqueue(wrongInputData)
   wrongTestRunner.run()
   val wrongResponseExample = "Please send me City and Country. For example: Moscow,rus"
@@ -38,6 +39,7 @@ class TestWeatherApiProcessor extends AnyFunSuite with should.Matchers {
 
   val testRunner: TestRunner = TestRunners.newTestRunner(new WeatherApiProcessor)
 
+  testRunner.setProperty(WeatherApiProcessor.useDefaultLocationPropertyName, "true")
   testRunner.enqueue(correctInputData)
   testRunner.run()
 
@@ -57,5 +59,9 @@ class TestWeatherApiProcessor extends AnyFunSuite with should.Matchers {
     val attribute = correctOutputFile.getAttribute("request_result")
     assert(attribute != wrongResponseExample)
   }
+
+  /*test("check if defined property exists") {
+    correctOutputFile.assert
+  }*/
 
 }
