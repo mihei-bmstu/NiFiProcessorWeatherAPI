@@ -3,9 +3,8 @@ package com.example.processors.weatherAPI
 import org.apache.nifi.annotation.documentation.{CapabilityDescription, Tags}
 import org.apache.nifi.components.PropertyDescriptor
 import org.apache.nifi.flowfile.FlowFile
-import org.apache.nifi.processor.io.{InputStreamCallback, OutputStreamCallback}
-import org.apache.nifi.processor.util.StandardValidators
-import org.apache.nifi.processor.{AbstractProcessor, ProcessContext, ProcessSession, ProcessorInitializationContext, Relationship}
+import org.apache.nifi.processor.io.InputStreamCallback
+import org.apache.nifi.processor.{AbstractProcessor, ProcessContext, ProcessSession, Relationship}
 import org.apache.nifi.stream.io.StreamUtils
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -31,7 +30,7 @@ class WeatherApiProcessor extends AbstractProcessor
 
   var useDefaultLocation: PropertyDescriptor = _
 
-  override def getSupportedPropertyDescriptors(): java.util.List[PropertyDescriptor] = {
+  override def getSupportedPropertyDescriptors: java.util.List[PropertyDescriptor] = {
     properties.asJava
   }
 
